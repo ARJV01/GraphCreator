@@ -16,9 +16,6 @@ void removeE(char aMatrix[21][21]);
 void removeV(char aMatrix[21][21], vector<char> &verts);
 void path(char aMatrix[21][21], vector<char> verts);
 void vD(vector<char> &verts, char x);
-void setterD(map<char, int> &distances, char shortestV, int shortest);
-void markVisited(char x, map<char, bool> &visited);
-void removeVert(char x, vector<char> &v);
 
 int main()
 {
@@ -212,3 +209,61 @@ void vD(vector<char> &verts, char x)
     }
 }
 
+void path(char aMatrix[21][21], vector<char> verts)
+{
+    map<char, int> distances;
+    map<char, bool> visited;
+
+    char start;
+    cout << "please enter the start node" << endl;
+    cin >> start;
+
+    vector<char>::iterator itr;
+
+    for (itr = verts.begin(); itr < verts.end(); itr++)
+    {
+        distances.insert({*itr, INT_MAX});
+        visited.insert({*itr, false});
+    }
+
+    distances[start] = 0;
+
+    while (true)
+    { // trust
+        int shortest = INT_MAX;
+        char shortestV = '\0'; // Initialize to some invalid character
+
+        for (char v : verts)
+        { // v is the char is the vector
+            if ((visited[v] == false) && distances[v] < shortest)
+            {                            // if it has not been visited and of the distance is shorter thand shortest
+                shortest = distances[v]; // shortest is the new distance
+                shortestV = v;           // shortest vert is the new vert(the thing we will look from the next time in loop)
+            }
+        }
+
+        if (shortestV == '\0')
+        { // if there is nothing more to iterate(this is how we break out)
+            break;
+        }
+
+        visited[shortestV] = true; // Find the new node and more it as visited
+
+        for (int column = 1; column < 21; column++)
+        { // look though columns
+            if (aMatrix[0][column] == shortestV)
+            { // if it is the shortest V
+                for (int row = 1; row < 21; row++)
+                { // look through rows
+                    if (aMatrix[row][column] != NULL && visited[aMatrix[row][0]] == false)
+                    { // if its not NULL and its not visited
+                        if (distances[aMatrix[row][0]] > distances[shortestV] + (aMatrix[row][column] - '0'))
+                        {
+                            distances[aMatrix[row][0]] = distances[shortestV] + (aMatrix[row][column] - '0');
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
