@@ -5,6 +5,7 @@
 #include <map>
 #include <vector>
 #include <climits>
+#include <algorithm>
 
 using namespace std;
 
@@ -16,6 +17,7 @@ void removeE(char aMatrix[21][21]);
 void removeV(char aMatrix[21][21], vector<char> &verts);
 void path(char aMatrix[21][21], vector<char> verts);
 void vD(vector<char> &verts, char x);
+void printPath(vector<char> pathF);
 
 int main()
 {
@@ -27,7 +29,7 @@ int main()
 
     while (sR == true)
     {
-        cout << "1please enter addV, addE, removeE, removeV, print, path or quit" << endl;
+        cout << "please enter addV, addE, removeE, removeV, print, path or quit" << endl;
         cin >> input;
         if (strcmp(input, "addV") == 0)
         {
@@ -213,10 +215,14 @@ void path(char aMatrix[21][21], vector<char> verts)
 {
     map<char, int> distances;
     map<char, bool> visited;
+    map<char, char> paths;
 
     char start;
     cout << "please enter the start node" << endl;
     cin >> start;
+    char end;
+    cout << "please enter the end node" << endl;
+    cin >> end;
 
     vector<char>::iterator itr;
 
@@ -224,9 +230,11 @@ void path(char aMatrix[21][21], vector<char> verts)
     {
         distances.insert({*itr, INT_MAX});
         visited.insert({*itr, false});
+        paths.insert({*itr, '\0'});
     }
 
     distances[start] = 0;
+    char previous = start;
 
     while (true)
     { // trust
@@ -258,12 +266,43 @@ void path(char aMatrix[21][21], vector<char> verts)
                     if (aMatrix[row][column] != NULL && visited[aMatrix[row][0]] == false)
                     { // if its not NULL and its not visited
                         if (distances[aMatrix[row][0]] > distances[shortestV] + (aMatrix[row][column] - '0'))
-                        {
+                        { //
                             distances[aMatrix[row][0]] = distances[shortestV] + (aMatrix[row][column] - '0');
+                            paths[aMatrix[row][0]] = shortestV;
                         }
                     }
                 }
             }
         }
+        previous = shortestV;
     }
+    vector<char> pathF;
+    char current = end;
+    pathF.push_back(end);
+    if (paths[end] != false)
+    {
+        while (current != start)
+        {
+            current = paths[current];
+            pathF.push_back(current);
+        }
+        reverse(pathF.begin(), pathF.end());
+        printPath(pathF);
+        cout << "Distance: " << distances[end] << endl;
+    }
+    else
+    {
+        cout << "No path found" << endl;
+    }
+}
+
+void printPath(vector<char> pathF)
+{
+    vector<char>::iterator itr;
+
+    for (itr = pathF.begin(); itr < pathF.end(); itr++)
+    {
+        cout << *itr << ",";
+    }
+    cout << endl;
 }
