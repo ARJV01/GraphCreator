@@ -1,3 +1,7 @@
+// Arjun Vinsel
+// 4-JUN-2024
+// This code is a graph and can find the shortest path using Dijktras.
+
 #include <iostream>
 #include <string>
 #include <cstring>
@@ -9,15 +13,15 @@
 
 using namespace std;
 
-void addV(char aMatrix[21][21], vector<char> &verts);
-void addE(char aMatrix[21][21]);
-void clearM(char aMatrix[21][21]);
-void printM(char aMatrix[21][21]);
-void removeE(char aMatrix[21][21]);
-void removeV(char aMatrix[21][21], vector<char> &verts);
-void path(char aMatrix[21][21], vector<char> verts);
-void vD(vector<char> &verts, char x);
-void printPath(vector<char> pathF);
+void addV(char aMatrix[21][21], vector<char> &verts);    // adds verticies
+void addE(char aMatrix[21][21]);                         // add edges
+void clearM(char aMatrix[21][21]);                       // clears the matrix
+void printM(char aMatrix[21][21]);                       // prints the matrix
+void removeE(char aMatrix[21][21]);                      // remove edges
+void removeV(char aMatrix[21][21], vector<char> &verts); // remove verticies
+void path(char aMatrix[21][21], vector<char> verts);     // finds the paths
+void vD(vector<char> &verts, char x);                    // erases from the vector of verticies
+void printPath(vector<char> pathF);                      // prints the path
 
 int main()
 {
@@ -65,7 +69,7 @@ int main()
 }
 
 void addV(char aMatrix[21][21], vector<char> &verts)
-{
+{ // adds verticies to the matrix
     char input = ' ';
     cout << "please enter a label" << endl;
     cin >> input;
@@ -89,7 +93,7 @@ void addV(char aMatrix[21][21], vector<char> &verts)
 }
 
 void addE(char aMatrix[21][21])
-{
+{ // adds edges to the matrix
     char start = ' ';
     cout << "please enter the start" << endl;
     cin >> start;
@@ -143,7 +147,7 @@ void printM(char aMatrix[21][21])
 }
 
 void removeE(char aMatrix[21][21])
-{
+{ // removes edges
     char start = ' ';
     cout << "please enter the start" << endl;
     cin >> start;
@@ -171,7 +175,7 @@ void removeE(char aMatrix[21][21])
 }
 
 void removeV(char aMatrix[21][21], vector<char> &verts)
-{
+{ // remove verticies
     char v;
     cout << "enter the point you wish to delete" << endl;
     cin >> v;
@@ -199,7 +203,7 @@ void removeV(char aMatrix[21][21], vector<char> &verts)
 }
 
 void vD(vector<char> &verts, char x)
-{
+{ // removes verticies from the vector
     vector<char>::iterator itr;
 
     for (itr = verts.begin(); itr < verts.end(); itr++)
@@ -212,7 +216,7 @@ void vD(vector<char> &verts, char x)
 }
 
 void path(char aMatrix[21][21], vector<char> verts)
-{
+{ // finds the shortest path to a given point
     map<char, int> distances;
     map<char, bool> visited;
     map<char, char> paths;
@@ -280,7 +284,7 @@ void path(char aMatrix[21][21], vector<char> verts)
     char current = end;
     pathF.push_back(end);
     if (paths[end] != false)
-    {
+    { // if there is a path
         while (current != start)
         {
             current = paths[current];
@@ -291,13 +295,13 @@ void path(char aMatrix[21][21], vector<char> verts)
         cout << "Distance: " << distances[end] << endl;
     }
     else
-    {
+    { // if there is no path to end
         cout << "No path found" << endl;
     }
 }
 
 void printPath(vector<char> pathF)
-{
+{ // prints out the path
     vector<char>::iterator itr;
 
     for (itr = pathF.begin(); itr < pathF.end(); itr++)
